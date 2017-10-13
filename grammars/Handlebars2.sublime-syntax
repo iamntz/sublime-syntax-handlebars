@@ -21,6 +21,7 @@ contexts:
       push: "Packages/HTML/HTML.sublime-syntax"
       with_prototype:
         - include: comments
+        - include: expressions
 
 
   comments:
@@ -32,12 +33,22 @@ contexts:
           scope: punctuation.definition.comment.end.handlebars
           pop: true
     - match: '{{\s+!'
-      scope: 'invalid.illegal.bad-comments-or-CDATA.handlebars'
+      scope: invalid.illegal.bad-comments-or-CDATA.handlebars
       push:
-        - meta_scope: comment.block.handlebars
+        - meta_scope: invalid.illegal.bad-comments-or-CDATA.handlebars
         - match: '}}'
           scope: punctuation.definition.comment.end.handlebars
           pop: true
+
+  expressions:
+    - match: '{{{?'
+      scope: punctuation.section.embedded.begin.handlebars
+      push:
+        - meta_scope: variable.parameter.handlebars
+        - match: '}}}?'
+          scope: punctuation.section.embedded.end.handlebars
+          pop: true
+
 
 # variable.language
 # invalid.illegal

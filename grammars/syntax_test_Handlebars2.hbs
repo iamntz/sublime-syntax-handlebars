@@ -1,10 +1,21 @@
 ## SYNTAX TEST "Packages/Handlebars/grammars/Handlebars2.sublime-syntax"
 
+    {{ ! foo }}
+##  ^^^^^^^^^^^  invalid.illegal.bad-comments-or-CDATA.handlebars
+
     {{! foo }}
 ##  ^^^^^^^^^^ comment.block.handlebars
 ##  ^^^ punctuation.definition.comment.begin.handlebars
 ##       ^^^ comment.block.handlebars
 ##          ^^ punctuation.definition.comment.end.handlebars
 
-    {{ ! foo }}
-##  ^^^^^^^^^^^  invalid.illegal.bad-comments-or-CDATA.handlebars
+
+    {{ foo }}
+##  ^^^^^^^^^ variable.parameter.handlebars
+##  ^^ punctuation.section.embedded.begin.handlebars
+##     ^^^ variable.parameter.handlebars
+##         ^^ punctuation.section.embedded.end.handlebars
+
+
+    {{{ foo }}}
+##  ^^^^^^^^^^^ variable.parameter.handlebars
