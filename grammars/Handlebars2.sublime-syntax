@@ -1,0 +1,43 @@
+%YAML 1.2
+---
+name: Handlebars2
+file_extensions:
+  - hbs
+  - handlebars
+scope: source.handlebars
+
+variables:
+  block_tags: 'if|unless|each|with|else if'
+  block_tags2: 'else'
+
+  specials: 'this|@key|@index|@last|@first'
+
+  builtin_fn: 'lookup|log'
+
+
+contexts:
+  main:
+    - match: ""
+      push: "Packages/HTML/HTML.sublime-syntax"
+      with_prototype:
+        - include: comments
+
+
+  comments:
+    - match: '{{!'
+      scope: punctuation.definition.comment.begin.handlebars
+      push:
+        - meta_scope: comment.block.handlebars
+        - match: '}}'
+          scope: punctuation.definition.comment.end.handlebars
+          pop: true
+    - match: '{{\s+!'
+      scope: 'invalid.illegal.bad-comments-or-CDATA.handlebars'
+      push:
+        - meta_scope: comment.block.handlebars
+        - match: '}}'
+          scope: punctuation.definition.comment.end.handlebars
+          pop: true
+
+# variable.language
+# invalid.illegal
