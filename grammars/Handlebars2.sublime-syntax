@@ -13,6 +13,8 @@ variables:
   specials: 'this|@key|@index|@last|@first'
 
   builtin_fn: 'lookup|log'
+  unnamed_arg: '@?[-a-zA-Z0-9_\./"]+\s?'
+  named_arg: '[-a-zA-Z0-9_\./]+'
 
 
 contexts:
@@ -41,14 +43,19 @@ contexts:
           pop: true
 
   expressions:
-    - match: '{{{?'
-      scope: punctuation.section.embedded.begin.handlebars
+    - match: ({{{?\s?)(@?[-a-zA-Z0-9_\./]+)\s?(this\s?)?
+      scope: meta.embedded.line.handlebars
+      captures:
+        1: punctuation.section.embedded.begin.handlebars
+        2: variable.language.handlebars
+        3: support.constant.handlebars
       push:
-        - meta_scope: variable.parameter.handlebars
-        - match: '}}}?'
+        - match: '({{named_arg}})=({{unnamed_arg}})'
+          scope: variable.language.arguments.named.handlebars
+
+        - match: '{{unnamed_arg}}'
+          scope: variable.language.arguments.unnamed.handlebars
+
+        - match: '\s?}}}?'
           scope: punctuation.section.embedded.end.handlebars
           pop: true
-
-
-# variable.language
-# invalid.illegal

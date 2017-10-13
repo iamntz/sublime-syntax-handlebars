@@ -11,11 +11,17 @@
 
 
     {{ foo }}
-##  ^^^^^^^^^ variable.parameter.handlebars
-##  ^^ punctuation.section.embedded.begin.handlebars
-##     ^^^ variable.parameter.handlebars
-##         ^^ punctuation.section.embedded.end.handlebars
+##     ^^^ variable.language.handlebars
+
+    {{{ foo baz }}}
+##          ^^^ variable.language.arguments.unnamed.handlebars
+
+    {{{ foo this "bar" foo="bar" baz="bar" }}}
+##          ^^^^ support.constant.handlebars
+##               ^^^^^ variable.language.arguments.unnamed.handlebars
+##                     ^^^^^^^^^ variable.language.arguments.named.handlebars
+##                               ^^^^^^^^^ variable.language.arguments.named.handlebars
 
 
-    {{{ foo }}}
-##  ^^^^^^^^^^^ variable.parameter.handlebars
+
+"{{!foo}}"
