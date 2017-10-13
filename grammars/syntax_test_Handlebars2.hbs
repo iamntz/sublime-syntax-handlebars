@@ -24,4 +24,17 @@
 
 
 
-"{{!foo}}"
+    {{#if foo}}
+##  ^^^  punctuation.section.embedded.begin.handlebars
+##     ^^  keyword.control.start.handlebars
+##        ^^^  variable.language.arguments.unnamed.handlebars
+##           ^^  punctuation.section.embedded.end.handlebars
+    <div></div> ---------- leave this as html
+    {{foo}}
+    {{else}}
+    {{/if}}
+##    ^^^  keyword.control.end.handlebars
+
+{{#each foo}}
+
+{{/each}}

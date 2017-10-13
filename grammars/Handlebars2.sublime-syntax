@@ -24,6 +24,7 @@ contexts:
       with_prototype:
         - include: comments
         - include: expressions
+        - include: blocks
 
 
   comments:
@@ -43,7 +44,7 @@ contexts:
           pop: true
 
   expressions:
-    - match: ({{{?\s?)(@?[-a-zA-Z0-9_\./]+)\s?(this\s?)?
+    - match: ({{{?\s?)(@?[-a-zA-Z0-9_\./]+)\s?({{specials}}\s?)?
       scope: meta.embedded.line.handlebars
       captures:
         1: punctuation.section.embedded.begin.handlebars
@@ -59,3 +60,19 @@ contexts:
         - match: '\s?}}}?'
           scope: punctuation.section.embedded.end.handlebars
           pop: true
+
+  blocks:
+    - match: ({{#)({{block_tags}})\s({{unnamed_arg}})(}})
+      captures:
+        1: punctuation.section.embedded.begin.handlebars
+        2: keyword.control.start.handlebars
+        3: variable.language.arguments.unnamed.handlebars
+        4: punctuation.section.embedded.end.handlebars
+      push:
+        - match: '({{/)(\2)(}})'
+          captures:
+            1: punctuation.section.embedded.begin.handlebars
+            3: punctuation.section.embedded.end.handlebars
+            2: keyword.control.end.handlebars
+          pop: true
+
