@@ -9,3 +9,27 @@
 ##       ^^^ comment.block.handlebars
 ##          ^^ punctuation.definition.comment.end.handlebars
 
+
+    {{ # foo }}
+##  ^^^^^^^^^^^ invalid.illegal.bad-spacing.handlebars
+
+    {{ foo }}
+##     ^^^ variable.parameter.handlebars
+
+    {{ foo this }}
+##         ^^^^  support.constant.handlebars
+
+    {{ foo "bar" }}
+##         ^ punctuation.definition.string.begin.handlebars
+##             ^ punctuation.definition.string.end.handlebars
+##         ^^^^^ string.quoted.double.handlebars
+
+    {{ foo 'bar' }}
+##         ^ punctuation.definition.string.begin.handlebars
+##             ^ punctuation.definition.string.end.handlebars
+##         ^^^^^ string.quoted.single.handlebars
+
+    {{ foo this foo="bar" }}
+##              ^^^ variable.parameter.handlebars
+##                 ^ entity.other.attribute-name.handlebars
+##                  ^^^^^ meta.function.inline.other.handlebars

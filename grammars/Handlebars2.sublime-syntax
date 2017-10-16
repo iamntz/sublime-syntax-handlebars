@@ -23,28 +23,58 @@ contexts:
       push: "Packages/HTML/HTML.sublime-syntax"
       with_prototype:
         - include: comments
-        - match: "{{"
-          push: expr
+        - include: illegal_blocks
 
-  expr:
-    - match: "}}"
+        - match: '{{'
+          push: handlebars_tags
+          scope: punctuation.section.braces.start.handlebars
+
+        # - match: '({{\s?)(#)?'
+        #   push: keywords
+        #   captures:
+        #     1: punctuation.section.braces.start.handlebars
+
+  handlebars_tags:
+    - match: '"'
+      scope: punctuation.definition.string.begin.handlebars
+      push: double_quoted_string
+
+    - match: "'"
+      scope: punctuation.definition.string.begin.handlebars
+      push: single_quoted_string
+
+    - match: '#\s'
+      scope: invalid.illegal.bad-spacing.handlebars
+
+    - match: '{{specials}}'
+      scope: support.constant.handlebars
+
+    - match: '({{named_arg}})(\s?+=\s?+)({{unnamed_arg}})'
+      captures:
+        0: variable.language.arguments.named.handlebars
+        1: variable.parameter.handlebars
+        2: entity.other.attribute-name.handlebars
+        3: meta.function.inline.other.handlebars
+
+    - match: \b(@?[-a-zA-Z0-9_\./]+)
+      scope: meta.embedded.line.handlebars
+      captures:
+        1: variable.parameter.handlebars
+
+    - match: '}}'
+      pop: true
+
+
+
+  keywords:
+    - match: '(\s?}})'
+      captures:
+        1: punctuation.section.braces.end.handlebars
       pop: true
     - match: \b({{block_tags}})\b
-      scope: keyword.control
+      scope: keyword.control.handlebars
     - match: \b({{block_tags2}})\b
-      scope: keyword.control
-    - match: ""
-      scope: cucu
-
-
-  xmain:
-    - match: ""
-      push: "Packages/HTML/HTML.sublime-syntax"
-      with_prototype:
-        - include: comments
-        - include: expressions
-        - include: blocks
-
+      scope: keyword.control.handlebars
 
   comments:
     - match: '{{!'
@@ -62,57 +92,31 @@ contexts:
           scope: punctuation.definition.comment.end.handlebars
           pop: true
 
-  expressions:
-    - match: ({{{?\s?)(@?[-a-zA-Z0-9_\./]+)\s?({{specials}}\s?)?
-      scope: meta.embedded.line.handlebars
-      captures:
-        1: punctuation.section.embedded.begin.handlebars
-        2: variable.language.handlebars
-        3: support.constant.handlebars
+  illegal_blocks:
+    - match: '{{\s?#\s+'
+      scope: invalid.illegal.bad-spacing.handlebars
       push:
-        - match: '({{named_arg}})=({{unnamed_arg}})'
-          scope: variable.language.arguments.named.handlebars
-
-        - match: '{{unnamed_arg}}'
-          scope: variable.language.arguments.unnamed.handlebars
-
-        - match: '\s?}}}?'
-          scope: punctuation.section.embedded.end.handlebars
+        - meta_scope: invalid.illegal.bad-spacing.handlebars
+        - match: '}}'
+          scope: punctuation.section.braces.end.handlebars
           pop: true
 
-  blocks:
-    - match: '({{)(if)(}})'
-      captures:
-        1: punctuation.section.braces.end.test
-        2: keyword.control.test
-        3: punctuation.section.braces.begin.test
-      push:
-        - match: '({{)(\/)(if)(}})'
-          captures:
-            1: punctuation.section.braces.end.test
-            2: punctuation.definition.generic.end.test
-            3: keyword.control.test
-            4: punctuation.section.braces.begin.test
-          pop: true
-        - include: scope:text.html.basic
+  double_quoted_string:
+    - meta_scope: string.quoted.double.handlebars
+    - match: \\.
+      scope: string.quoted.double.handlebars
 
-  xblocks:
-    - match: ({{#)({{block_tags}})\s({{unnamed_arg}})(}})
-      captures:
-        1: punctuation.section.embedded.begin.handlebars
-        2: keyword.control.start.handlebars
-        3: variable.language.arguments.unnamed.handlebars
-        4: punctuation.section.embedded.end.handlebars
+    - match: '"'
+      scope: 'punctuation.definition.string.end.handlebars'
+      pop: true
 
-      push:
-        - match: '({{/)(\2)(}})'
-          captures:
-            1: punctuation.section.embedded.begin.handlebars
-            3: punctuation.section.embedded.end.handlebars
-            2: keyword.control.end.handlebars
-          pop: true
-        - include: scope:text.html
-        - include: expressions
-        - include: comments
 
+  single_quoted_string:
+    - meta_scope: string.quoted.single.handlebars
+    - match: \\.
+      scope: string.quoted.single.handlebars
+
+    - match: "'"
+      scope: 'punctuation.definition.string.end.handlebars'
+      pop: true
 
