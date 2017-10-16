@@ -1,0 +1,56 @@
+## SYNTAX TEST "Packages/Handlebars/grammars/Handlebars2.sublime-syntax"
+
+    {{ ! foo }}
+##  ^^^^^^^^^^^  invalid.illegal.bad-comments-or-CDATA.handlebars
+
+    {{! foo }}
+##  ^^^^^^^^^^ comment.block.handlebars
+##  ^^^ punctuation.definition.comment.begin.handlebars
+##       ^^^ comment.block.handlebars
+##          ^^ punctuation.definition.comment.end.handlebars
+
+
+    {{ foo }}
+##     ^^^ variable.language.handlebars
+
+    {{{ foo baz }}}
+##          ^^^ variable.language.arguments.unnamed.handlebars
+
+    {{{ foo this "bar" foo="bar" baz="bar" }}}
+##          ^^^^ support.constant.handlebars
+##               ^^^^^ variable.language.arguments.unnamed.handlebars
+##                     ^^^^^^^^^ variable.language.arguments.named.handlebars
+##                               ^^^^^^^^^ variable.language.arguments.named.handlebars
+
+
+
+    {{#if foo}}
+##  ^^^  punctuation.section.embedded.begin.handlebars
+##     ^^  keyword.control.start.handlebars
+##        ^^^  variable.language.arguments.unnamed.handlebars
+##           ^^  punctuation.section.embedded.end.handlebars
+
+    <div></div> ---------- leave this as html
+
+    {{foo}}
+
+    {{else}}
+
+    {{else if foo}}
+
+
+      {{! foo }}
+    {{/if}}
+##  ^^^  punctuation.section.embedded.begin.handlebars
+##     ^^  keyword.control.end.handlebars
+##       ^^  punctuation.section.embedded.end.handlebars
+
+{{#each foo}}
+
+{{/each}}
+
+
+{{if}}
+<test>hell</test>
+
+{{/if}}

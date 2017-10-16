@@ -23,6 +23,25 @@ contexts:
       push: "Packages/HTML/HTML.sublime-syntax"
       with_prototype:
         - include: comments
+        - match: "{{"
+          push: expr
+
+  expr:
+    - match: "}}"
+      pop: true
+    - match: \b({{block_tags}})\b
+      scope: keyword.control
+    - match: \b({{block_tags2}})\b
+      scope: keyword.control
+    - match: ""
+      scope: cucu
+
+
+  xmain:
+    - match: ""
+      push: "Packages/HTML/HTML.sublime-syntax"
+      with_prototype:
+        - include: comments
         - include: expressions
         - include: blocks
 
@@ -62,12 +81,29 @@ contexts:
           pop: true
 
   blocks:
+    - match: '({{)(if)(}})'
+      captures:
+        1: punctuation.section.braces.end.test
+        2: keyword.control.test
+        3: punctuation.section.braces.begin.test
+      push:
+        - match: '({{)(\/)(if)(}})'
+          captures:
+            1: punctuation.section.braces.end.test
+            2: punctuation.definition.generic.end.test
+            3: keyword.control.test
+            4: punctuation.section.braces.begin.test
+          pop: true
+        - include: scope:text.html.basic
+
+  xblocks:
     - match: ({{#)({{block_tags}})\s({{unnamed_arg}})(}})
       captures:
         1: punctuation.section.embedded.begin.handlebars
         2: keyword.control.start.handlebars
         3: variable.language.arguments.unnamed.handlebars
         4: punctuation.section.embedded.end.handlebars
+
       push:
         - match: '({{/)(\2)(}})'
           captures:
@@ -75,4 +111,8 @@ contexts:
             3: punctuation.section.embedded.end.handlebars
             2: keyword.control.end.handlebars
           pop: true
+        - include: scope:text.html
+        - include: expressions
+        - include: comments
+
 
