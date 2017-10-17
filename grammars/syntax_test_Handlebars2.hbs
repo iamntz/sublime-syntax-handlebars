@@ -33,3 +33,20 @@
 ##              ^^^ variable.parameter.handlebars
 ##                 ^ entity.other.attribute-name.handlebars
 ##                  ^^^^^ meta.function.inline.other.handlebars
+
+    {{ > foo bar="Baz" }}
+
+    {{ #each foo }}
+##      ^^^^ keyword.control.handlebars
+    {{ /each }}
+##      ^^^^ keyword.control.handlebars
+
+    {{ #if foo}}
+
+    {{else if foo}}
+
+    {{ else }}
+
+    {{/if}}
+
+    {{#foo}}{{/foo}}

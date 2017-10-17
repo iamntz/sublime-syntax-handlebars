@@ -7,8 +7,8 @@ file_extensions:
 scope: source.handlebars
 
 variables:
-  block_tags: 'if|unless|each|with|else if'
-  block_tags2: 'else'
+  block_tags: 'if|unless|each|with'
+  block_tags2: 'else(\sif)?'
 
   specials: 'this|@key|@index|@last|@first'
 
@@ -29,11 +29,6 @@ contexts:
           push: handlebars_tags
           scope: punctuation.section.braces.start.handlebars
 
-        # - match: '({{\s?)(#)?'
-        #   push: keywords
-        #   captures:
-        #     1: punctuation.section.braces.start.handlebars
-
   handlebars_tags:
     - match: '"'
       scope: punctuation.definition.string.begin.handlebars
@@ -43,8 +38,19 @@ contexts:
       scope: punctuation.definition.string.begin.handlebars
       push: single_quoted_string
 
-    - match: '#\s'
-      scope: invalid.illegal.bad-spacing.handlebars
+    - match: '{{block_tags2}}'
+      captures:
+        0: keyword.control.handlebars
+
+    - match: '(#)({{block_tags}})'
+      captures:
+        2: keyword.control.handlebars
+
+
+    - match: '(/)({{block_tags}})'
+      captures:
+        2: keyword.control.handlebars
+
 
     - match: '{{specials}}'
       scope: support.constant.handlebars
@@ -62,19 +68,8 @@ contexts:
         1: variable.parameter.handlebars
 
     - match: '}}'
+      scope: punctuation.section.braces.end.handlebars
       pop: true
-
-
-
-  keywords:
-    - match: '(\s?}})'
-      captures:
-        1: punctuation.section.braces.end.handlebars
-      pop: true
-    - match: \b({{block_tags}})\b
-      scope: keyword.control.handlebars
-    - match: \b({{block_tags2}})\b
-      scope: keyword.control.handlebars
 
   comments:
     - match: '{{!'
@@ -107,9 +102,8 @@ contexts:
       scope: string.quoted.double.handlebars
 
     - match: '"'
-      scope: 'punctuation.definition.string.end.handlebars'
+      scope: punctuation.definition.string.end.handlebars
       pop: true
-
 
   single_quoted_string:
     - meta_scope: string.quoted.single.handlebars
@@ -117,6 +111,5 @@ contexts:
       scope: string.quoted.single.handlebars
 
     - match: "'"
-      scope: 'punctuation.definition.string.end.handlebars'
+      scope: punctuation.definition.string.end.handlebars
       pop: true
-
