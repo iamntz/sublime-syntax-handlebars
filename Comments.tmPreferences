@@ -3,24 +3,21 @@
   <dict>
     <key>name</key>
     <string>Comments</string>
-
     <key>scope</key>
     <string>source.handlebars</string>
-
     <key>settings</key>
     <dict>
       <key>shellVariables</key>
       <array>
         <dict>
           <key>name</key>
-          <string>TM_COMMENT_START</string>
+          <string>TM_COMMENT_START_2</string>
           <key>value</key>
           <string>{{!</string>
         </dict>
-
         <dict>
           <key>name</key>
-          <string>TM_COMMENT_END</string>
+          <string>TM_COMMENT_END_2</string>
           <key>value</key>
           <string>}}</string>
         </dict>
